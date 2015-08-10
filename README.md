@@ -1,0 +1,2 @@
+# bitspread
+Crypto Trading Bot
