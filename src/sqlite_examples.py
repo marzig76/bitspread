@@ -1,7 +1,7 @@
 import sqlite3
 
 
-conn = sqlite3.connect('rates.db')
+conn = sqlite3.connect('../db/rates.db')
 c = conn.cursor()
 
 # Create table
@@ -11,7 +11,7 @@ c = conn.cursor()
 #c.execute('delete from rate')
 #c.execute('INSERT INTO rate VALUES (?,?,datetime())', ('BTC_LTC',66.5656))
 
-for row in c.execute('SELECT min(rate), max(rate) FROM rate'):
+for row in c.execute(''):
     print row
 
 # Save (commit) the changes
