@@ -10,7 +10,7 @@ class ratedata:
         self.c = self.conn.cursor()
 
     def rateinsert(self, rate, value):
-        self.c.execute('INSERT INTO rate VALUES (?,?,datetime())', (rate,value))
+        self.c.execute("INSERT INTO rate VALUES (?,?,datetime('now', 'localtime'))", (rate,value))
         self.conn.commit()
 
     def dataclose(self):

@@ -17,16 +17,20 @@ while 1:
     # checking exchange rate
     getrate = apiconn.request(ssrate)
 
-    # extract the body of the response
-    for item in getrate:
-        if item == "body":
-            response = json.loads(getrate[item])
+    try:
+        # extract the body of the response
+        for item in getrate:
+            if item == "body":
+                response = json.loads(getrate[item])
 
-    # extract the rate
-    for key, value in response.iteritems():
-        if key == "rate":
-            datastore.rateinsert(rate,value)
+        # extract the rate
+        for key, value in response.iteritems():
+            if key == "rate":
+                datastore.rateinsert(rate,value)
 
-    time.sleep(60)
+        time.sleep(60)
+        
+    except ValueError:
+        print "No JSON to decode"
 
 datastore.dataclose
