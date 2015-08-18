@@ -20,7 +20,7 @@ class electrumapi:
 
         return True
 
-    # get an receiving address that hasn't been used yet
+    # get a receiving address that hasn't been used yet
     # this is not complete.. needs work
     def getrxaddress(self):
         command = self.coinbinary + " FILL THIS IN"
