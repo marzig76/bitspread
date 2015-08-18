@@ -1,36 +1,25 @@
-import json
 import time
-from restful_lib import Connection
+import requests
 from sqlite_class import ratedata
 
 # setup db
 datastore = ratedata()
 
-# connect to shapeshift
+# define api variables
 base_url = "https://shapeshift.io"
-apiconn = Connection(base_url)
-
 rate = "btc_ltc"
-ssrate = "/rate/" + rate
+apirate = "/rate/" + rate
 
-while 1:
-    # checking exchange rate
-    getrate = apiconn.request(ssrate)
+while True:
+    response = requests.get(base_url + apirate)
 
-    try:
-        # extract the body of the response
-        for item in getrate:
-            if item == "body":
-                response = json.loads(getrate[item])
+    if response.status_code == 200:
+        content = response.json()
 
-        # extract the rate
-        for key, value in response.iteritems():
+        for key, value in content.iteritems():
             if key == "rate":
                 datastore.rateinsert(rate,value)
 
-        time.sleep(60)
-        
-    except ValueError:
-        print "No JSON to decode"
+    time.sleep(59)
 
 datastore.dataclose
