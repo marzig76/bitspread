@@ -1,22 +1,13 @@
-import sqlite3
+import json
+from electrum_class import electrumapi
 
 
-conn = sqlite3.connect('../db/rates.db')
-c = conn.cursor()
+bitcoinwallet = electrumapi('btc')
 
-# Create table
-#c.execute('''CREATE TABLE rate (pair text, rate real, dtg text)''')
+testtx = bitcoinwallet.mktx('18jqWCXa3S53ewrop7Zgj4ccvNqBsJWmrt', "0.00553569")
 
-# Insert a row of data
-#c.execute('delete from rate')
-#c.execute('INSERT INTO rate VALUES (?,?,datetime())', ('BTC_LTC',66.5656))
+jsontx = json.loads(testtx)
 
-for row in c.execute(''):
-    print row
+print jsontx['hex']
 
-# Save (commit) the changes
-conn.commit()
-
-# We can also close the connection if we are done with it.
-# Just be sure any changes have been committed or they will be lost.
-conn.close()
+#testtx.broadcast(jsontx['hex'])
