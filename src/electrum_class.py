@@ -2,7 +2,7 @@ from executor import execute
 
 class electrumapi:
 
-    # default to bitcoin
+    # the binary to be called
     coinbinary = ""
     fee = ".0001"
 
@@ -27,8 +27,8 @@ class electrumapi:
         output = execute(command, capture='True')
         return output
 
-    # create and sign a bitcoin tx
-    # return the hex tx to broadcast
+    # create and sign a bitcoin transaction
+    # return the hex transaction to broadcast
     def mktx(self, recip, amount):
         if self.iscoinset():
             command = self.coinbinary + " payto -f " + self.fee + " " + recip + " " + amount
@@ -47,7 +47,7 @@ class electrumapi:
         else:
             return False
 
-    # check whether or not a cryptocoin has been set
+    # check whether or not a coin has been set
     def iscoinset(self):
         if self.coinbinary != "":
             return True
