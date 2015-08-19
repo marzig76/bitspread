@@ -1,13 +1,18 @@
 import json
 from electrum_class import electrumapi
 
-
+# create wallet instance
 bitcoinwallet = electrumapi('btc')
 
-testtx = bitcoinwallet.mktx('18jqWCXa3S53ewrop7Zgj4ccvNqBsJWmrt', "0.00553569")
+# get a rx address
+address = bitcoinwallet.getrxaddress()
 
+# mktx
+testtx = bitcoinwallet.mktx(address, "0.00543569")
 jsontx = json.loads(testtx)
+print testtx, jsontx['hex']
 
-print jsontx['hex']
+# broadcast
+#result = bitcoinwallet.broadcast(jsontx['hex'])
 
-#testtx.broadcast(jsontx['hex'])
+print result
