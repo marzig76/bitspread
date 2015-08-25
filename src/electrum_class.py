@@ -38,7 +38,7 @@ class electrumapi:
 
         return False
 
-    # create and sign a bitcoin transaction
+    # create and sign a transaction
     # return the hex transaction to broadcast
     def mktx(self, recip, amount):
         if self.iscoinset():
@@ -48,7 +48,7 @@ class electrumapi:
         else:
             return False
 
-    # broadcast a transaction to the bitcoin network
+    # broadcast a transaction to the network
     # use mktx to create a transaction to feed to this function
     def broadcast(self, tx):
         if self.iscoinset():
