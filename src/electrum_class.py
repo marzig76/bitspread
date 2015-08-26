@@ -1,3 +1,4 @@
+import json
 from executor import execute
 
 class electrumapi:
@@ -21,13 +22,23 @@ class electrumapi:
         return True
 
     # get a receiving address that hasn't been used yet
-    # this is not complete.. needs work
     def getrxaddress(self):
-        command = self.coinbinary + " FILL THIS IN"
-        output = execute(command, capture='True')
-        return output
+        # first get a list of available addresses
+        getaddresses = self.listaddresses()
+        addresslist = json.loads(getaddresses)
 
-    # create and sign a bitcoin transaction
+        # for each address, check to see if it's ever been used before
+        for address in addresslist:
+            gethistory = self.getaddresshistory(address)
+            historylist = json.loads(gethistory)
+
+            # once we find an address that hasn't been used (history is empty), return that address
+            if historylist == []:
+                return address
+
+        return False
+
+    # create and sign a transaction
     # return the hex transaction to broadcast
     def mktx(self, recip, amount):
         if self.iscoinset():
@@ -37,12 +48,12 @@ class electrumapi:
         else:
             return False
 
-    # broadcast a transaction to the bitcoin network
+    # broadcast a transaction to the network
     # use mktx to create a transaction to feed to this function
     def broadcast(self, tx):
         if self.iscoinset():
             command = self.coinbinary + " broadcast " + tx
-            # is there output?
+            output = execute(command, capture='True')
             return True
         else:
             return False
@@ -51,5 +62,47 @@ class electrumapi:
     def iscoinset(self):
         if self.coinbinary != "":
             return True
+        else:
+            return False
+
+    # standard electrum command - lists addresses
+    def listaddresses(self):
+        if self.iscoinset():
+            command = self.coinbinary + " listaddresses"
+            output = execute(command, capture='True')
+            return output
+        else:
+            return False
+
+    # standard electrum command - gets the history of an address
+    def getaddresshistory(self, address):
+        if self.iscoinset():
+            command = self.coinbinary + " getaddresshistory " + address
+            output = execute(command, capture='True')
+            return output
+        else:
+            return False
+
+    def daemon(self, control):
+        if self.iscoinset() and (control == 'start' or control == 'stop'):
+            command = self.coinbinary + " daemon " + control
+            output = execute(command, capture='True')
+            return True
+        else:
+            return False
+
+    def getbalance(self):
+        if self.iscoinset():
+            command = self.coinbinary + " getbalance "
+            output = execute(command, capture='True')
+            balance = json.loads(output)
+
+            for key, value in balance.iteritems():
+                if key == 'confirmed':
+                    returnbalance = value
+                elif key == 'unconfirmed':
+                    return False
+
+            return returnbalance
         else:
             return False
