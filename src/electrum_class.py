@@ -82,3 +82,27 @@ class electrumapi:
             return output
         else:
             return False
+
+    def daemon(self, control):
+        if self.iscoinset() and (control == 'start' or control == 'stop'):
+            command = self.coinbinary + " daemon " + control
+            output = execute(command, capture='True')
+            return True
+        else:
+            return False
+
+    def getbalance(self):
+        if self.iscoinset():
+            command = self.coinbinary + " getbalance "
+            output = execute(command, capture='True')
+            balance = json.loads(output)
+
+            for key, value in balance.iteritems():
+                if key == 'confirmed':
+                    returnbalance = value
+                elif key == 'unconfirmed':
+                    return False
+
+            return returnbalance
+        else:
+            return False
