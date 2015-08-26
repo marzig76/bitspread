@@ -11,15 +11,18 @@ rate = "btc_ltc"
 apirate = "/rate/" + rate
 
 while True:
-    response = requests.get(base_url + apirate)
+    try:
+        response = requests.get(base_url + apirate)
 
-    if response.status_code == 200:
-        content = response.json()
+        if response.status_code == 200:
+            content = response.json()
 
-        for key, value in content.iteritems():
-            if key == "rate":
-                datastore.rateinsert(rate,value)
+            for key, value in content.iteritems():
+                if key == "rate":
+                    datastore.rateinsert(rate,value)
 
-    time.sleep(59)
+        time.sleep(59)
+    except:
+        pass
 
 datastore.dataclose
