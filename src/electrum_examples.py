@@ -1,5 +1,5 @@
 import json
-from electrum_class import electrumapi
+from electrumwrapper import electrumapi
 
 # create wallet instance
 #bitcoinwallet = electrumapi('btc')
