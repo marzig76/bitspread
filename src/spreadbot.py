@@ -7,8 +7,8 @@ datastore = ratedata()
 
 # define api variables
 base_url = "https://shapeshift.io"
-rate = "btc_ltc"
-apirate = "/rate/" + rate
+pair = "btc_ltc"
+apirate = "/rate/" + pair
 
 while True:
     try:
@@ -19,7 +19,7 @@ while True:
 
             for key, value in content.iteritems():
                 if key == "rate":
-                    datastore.rateinsert(rate,value)
+                    datastore.rateinsert(pair,value)
 
         time.sleep(59)
     except:
