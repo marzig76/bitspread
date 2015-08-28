@@ -25,6 +25,8 @@ class exchangeapi:
             for key, value in content.iteritems():
                 if key == "rate":
                     return value
+                    
+        return False
 
     def getdepositaddress(self, withdrawaladdress, pair):
         post_data = {"withdrawal":withdrawaladdress, "pair":pair}
