@@ -13,6 +13,7 @@ class exchangeapi:
         if url != "":
             self.base_url = url
 
+    # get a rate for any pair of currencies
     def getrate(self, pair = ""):
         if pair != "":
             self.pair = pair
