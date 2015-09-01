@@ -25,11 +25,16 @@ class exchangeapi:
             for key, value in content.iteritems():
                 if key == "rate":
                     return value
-                    
+
         return False
 
-    def getdepositaddress(self, withdrawaladdress, pair):
-        post_data = {"withdrawal":withdrawaladdress, "pair":pair}
+    # in order to make a trade, you need to send a withdrawal address and a coin pair.
+    # pass those two parameters and get back a deposit address.
+    # anything deposited to that address will be converted (according to the specified currency pair)
+    # and sent to your withdrawal address
+    # in case something goes wrong, your inital deposit will be sent back to the return address
+    def getdepositaddress(self, withdrawaladdress, pair, returnaddress):
+        post_data = {"withdrawal":withdrawaladdress, "pair":pair, "returnAddress":returnaddress}
 
         shift = requests.post(self.base_url + self.apishift, post_data)
 
