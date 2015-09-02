@@ -9,7 +9,7 @@ datastore = ratedata()
 #datastore.rateinsert("test", 99.99)
 
 # insert trade
-#datastore.tradeinsert("test", 99.99, 1.5, "1zasdfe", "L3dasda")
+datastore.tradeinsert("ltc_btc", 0.014285714, 1.5, "L3dasda", "1zasdfe")
 
 # get latest rate
 #print "rate", datastore.getlatestrate()
