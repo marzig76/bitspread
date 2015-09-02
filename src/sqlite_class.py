@@ -25,7 +25,7 @@ class ratedata:
     # if it's older than 2 minutes, return False
     # this ensures the rate that's returned is very recent
     def getlatestrate(self):
-        query = "SELECT rate FROM rate WHERE dtg > datetime('now', '-2 minute', 'localtime') ORDER BY dtg DESC LIMIT 1"
+        query = "SELECT rate FROM rate WHERE dtg > datetime('now', '-2 minute', 'localtime') AND rate > 0 ORDER BY dtg DESC LIMIT 1"
         result = self.c.execute(query).fetchone()
 
         if result is not None:
