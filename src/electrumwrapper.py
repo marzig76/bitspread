@@ -3,9 +3,9 @@ from executor import execute
 
 class electrumapi:
 
-    # the binary to be called
-    coinbinary = ""
-    fee = ".0001"
+    coinbinary = ""     # the binary to be called
+    fee = ".0001"       # the fee to use
+    rate = 0            # what percentage of the total balance to be traded
 
     def __init__(self, coin):
         self.setcoin(coin)
@@ -14,8 +14,10 @@ class electrumapi:
     def setcoin(self, coin):
         if coin == 'btc':
             self.coinbinary = "electrum "
+            self.rate = .75
         elif coin == 'ltc':
             self.coinbinary = "electrum-ltc "
+            self.rate = 1
         else:
             return False
 
