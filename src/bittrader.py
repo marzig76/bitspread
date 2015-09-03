@@ -20,45 +20,43 @@ def rateswap(rate):
     return 1 / rate
 
 # all the steps to make a trade
-# should split this out more..
 def maketrade(pair):
-    # initialize the crypto wrappers
-    bitcoinwallet = electrumapi('btc')
-    litecoinwallet = electrumapi('ltc')
-
-    # define trade api variables
-    exchange = exchangeapi()
-
-    # we only want to trade if we have confirmed balances
-    # get the balance of the starting coin
+    # parse the pair to determine the starting coin and ending coin
+    # the starting coin is the coin we're depositing to the exchange
+    # the ending coin is the coin we're receiving from the exchange
     startingcoin = pair.split('_')[0]
+    endingcoin = pair.split('_')[1]
 
-    litecoinaddress = litecoinwallet.getrxaddress()
-    bitcoinaddress = bitcoinwallet.getrxaddress()
+    # initialize the crypto wrappers
+    startingwallet = electrumapi(startingcoin)
+    endingwallet = electrumapi(endingcoin)
 
-    if startingcoin == 'btc':
-        balance = bitcoinwallet.getbalance()
-        withdrawaladdress = litecoinaddress
-        returnaddress = bitcoinaddress
-        rate = 0.75 # convert this percentage of BTC to LTC
-    elif startingcoin == 'ltc':
-        balance = litecoinwallet.getbalance()
-        withdrawaladdress = litecoinaddress
-        returnaddress = bitcoinaddress
-        rate = 1    # always convert entire LTC balance bat to BTC
-    else:
+    # get the balace of the starting coin
+    startingcoinbalance = startingwallet.getbalance()
+
+    # only initiate a trade if funds are available and all of these funds are confirmed
+    if !startingcoinbalance or startingcoinbalance == 0:
         return False
 
-    if balance:
-        print "true: ", balance
-    else:
-        return False
+    # define withdrawal and return addresses
+    # the withdrawal address will be denominated in the ending coin
+    # the return address will be denominated in the starting coin
+    withdrawaladdress = endingwallet.getrxaddress()
+    returnaddress = startingwallet.getrxaddress()
 
+    # get a deposit address to send funds to
+    exchange = exchangeapi()
     depositaddress = exchange.getdepositaddress(withdrawaladdress, pair, returnaddress)
 
-    #make and broadcast transaction
+    # determine the amount to send
+    # take the balance and multiply it by the rate for that coin
+    txamount = (startingcoinbalance * startingwallet.rate) - startingwallet.fee
 
+    # make and broadcast transaction
+    tx = startingwallet.mktx(depositaddress, txamount)
 
+    if tx:
+        finalresult = startingwallet.broadcast(tx)
 
 # enter service loop
 while (True):
