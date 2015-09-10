@@ -35,7 +35,7 @@ def maketrade(pair):
     startingcoinbalance = startingwallet.getbalance()
 
     # only initiate a trade if funds are available and all of these funds are confirmed
-    if !startingcoinbalance or startingcoinbalance == 0:
+    if not startingcoinbalance:
         return False
 
     # define withdrawal and return addresses
