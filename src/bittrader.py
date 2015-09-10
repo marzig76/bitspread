@@ -50,7 +50,7 @@ def maketrade(pair):
 
     # determine the amount to send
     # take the balance and multiply it by the rate for that coin
-    txamount = (startingcoinbalance * startingwallet.rate) - startingwallet.fee
+    txamount = (startingcoinbalance * startingwallet.rate) - float(startingwallet.fee)
 
     # make and broadcast transaction
     tx = startingwallet.mktx(depositaddress, txamount)
