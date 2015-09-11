@@ -52,9 +52,10 @@ def maketrade(pair, rate):
 
     # determine the amount to send
     # take the balance and multiply it by the rate for that coin
+    # subtract fee amount
     txamount = (startingcoinbalance * startingwallet.rate) - float(startingwallet.fee)
 
-    # I just want to test this, so let's log the info instead of actually broadcasting the transaction
+    # log trade info
     print "--------------------------------------"
     print datetime.datetime.now()
     print "Trade Pair:", pair
@@ -65,10 +66,10 @@ def maketrade(pair, rate):
     print "--------------------------------------"
 
     # make and broadcast transaction
-    #tx = startingwallet.mktx(depositaddress, txamount)
+    tx = startingwallet.mktx(depositaddress, txamount)
 
-    #if tx:
-    #    finalresult = startingwallet.broadcast(tx)
+    if tx:
+        finalresult = startingwallet.broadcast(tx)
 
     # insert the trade into the database
     datastore = ratedata()
