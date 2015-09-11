@@ -1,6 +1,7 @@
 import re
 import json
 import time
+import datetime
 import requests
 from sqlite_class import ratedata
 from electrumwrapper import electrumapi
@@ -20,7 +21,7 @@ def rateswap(rate):
     return 1 / rate
 
 # all the steps to make a trade
-def maketrade(pair):
+def maketrade(pair, rate):
     # parse the pair to determine the starting coin and ending coin
     # the starting coin is the coin we're depositing to the exchange
     # the ending coin is the coin we're receiving from the exchange
@@ -33,9 +34,11 @@ def maketrade(pair):
 
     # get the balace of the starting coin
     startingcoinbalance = startingwallet.getbalance()
+    startingcoinbalance = 5;
 
     # only initiate a trade if funds are available and all of these funds are confirmed
     if not startingcoinbalance:
+        print datetime.datetime.now(), ": No balance to trade!"
         return False
 
     # define withdrawal and return addresses
@@ -52,11 +55,25 @@ def maketrade(pair):
     # take the balance and multiply it by the rate for that coin
     txamount = (startingcoinbalance * startingwallet.rate) - float(startingwallet.fee)
 
-    # make and broadcast transaction
-    tx = startingwallet.mktx(depositaddress, txamount)
+    # I just want to test this, so let's log the info instead of actually broadcasting the transaction
+    print "--------------------------------------"
+    print datetime.datetime.now()
+    print "Trade Pair:", pair
+    print "Withdrawal Address:", withdrawaladdress
+    print "Return Address:", returnaddress
+    print "Deposit Address:", depositaddress
+    print "Amount:", txamount
+    print "--------------------------------------"
 
-    if tx:
-        finalresult = startingwallet.broadcast(tx)
+    # make and broadcast transaction
+    #tx = startingwallet.mktx(depositaddress, txamount)
+
+    #if tx:
+    #    finalresult = startingwallet.broadcast(tx)
+
+    # insert the trade into the database
+    datastore = ratedata()
+    datastore.tradeinsert(pair, rate, txamount, depositaddress, withdrawaladdress)
 
 # enter service loop
 while (True):
