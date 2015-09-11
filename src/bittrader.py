@@ -35,7 +35,7 @@ def maketrade(pair):
     startingcoinbalance = startingwallet.getbalance()
 
     # only initiate a trade if funds are available and all of these funds are confirmed
-    if !startingcoinbalance or startingcoinbalance == 0:
+    if not startingcoinbalance:
         return False
 
     # define withdrawal and return addresses
@@ -50,7 +50,7 @@ def maketrade(pair):
 
     # determine the amount to send
     # take the balance and multiply it by the rate for that coin
-    txamount = (startingcoinbalance * startingwallet.rate) - startingwallet.fee
+    txamount = (startingcoinbalance * startingwallet.rate) - float(startingwallet.fee)
 
     # make and broadcast transaction
     tx = startingwallet.mktx(depositaddress, txamount)
