@@ -32,11 +32,16 @@ class electrumapi:
         # for each address, check to see if it's ever been used before
         for address in addresslist:
             gethistory = self.getaddresshistory(address)
-            historylist = json.loads(gethistory)
 
             # once we find an address that hasn't been used (history is empty), return that address
-            if historylist == []:
+            # sometimes the history is completely empty, sometimes it's an empty json set - check both
+            if not gethistory:
                 return address
+            else:
+                historylist = json.loads(gethistory)
+
+                if historylist == []:
+                    return address
 
         return False
 
