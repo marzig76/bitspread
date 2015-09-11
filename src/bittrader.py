@@ -34,7 +34,6 @@ def maketrade(pair, rate):
 
     # get the balace of the starting coin
     startingcoinbalance = startingwallet.getbalance()
-    startingcoinbalance = 5;
 
     # only initiate a trade if funds are available and all of these funds are confirmed
     if not startingcoinbalance:
