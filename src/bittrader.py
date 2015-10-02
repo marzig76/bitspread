@@ -33,7 +33,7 @@ def maketrade(pair, rate):
     endingwallet = electrumapi(endingcoin)
 
     # get the balace of the starting coin
-    startingcoinbalance = startingwallet.getbalance()
+    startingcoinbalance = float(startingwallet.getbalance())
 
     # only initiate a trade if funds are available and all of these funds are confirmed
     if not startingcoinbalance:
@@ -69,7 +69,8 @@ def maketrade(pair, rate):
     tx = startingwallet.mktx(depositaddress, txamount)
 
     if tx:
-        finalresult = startingwallet.broadcast(tx)
+        jsontx = json.loads(tx)
+        finalresult = startingwallet.broadcast(jsontx['hex'])
 
     # insert the trade into the database
     datastore = ratedata()
