@@ -49,7 +49,7 @@ class electrumapi:
     # return the hex transaction to broadcast
     def mktx(self, recip, amount):
         if self.iscoinset():
-            command = self.coinbinary + " payto -f " + self.fee + " " + recip + " " + amount
+            command = self.coinbinary + " payto -f " + self.fee + " " + recip + " " + str(amount)
             output = execute(command, capture='True')
             return output
         else:
