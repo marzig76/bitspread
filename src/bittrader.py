@@ -1,3 +1,4 @@
+import sys
 import re
 import json
 import time
@@ -81,5 +82,5 @@ while (True):
 
     # ALL THE LOGIC!!
 
-    exit()
+    sys.stdout.flush()
     time.sleep(59)
